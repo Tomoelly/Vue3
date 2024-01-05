@@ -1,68 +1,156 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>Title</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
 
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-        />
-    </head>
+<head>
+  <title>Title</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <body>
-        <header>
-            <!-- place navbar here -->
-        </header>
-        <main>
-            <div id="app">
-                <form>
-                  <div class="mb-3">
-                    <label for="productName" class="form-label">產品名稱</label>
-                    <input type="text" id="productName"
-                      class="form-control"
-                    >
-                  </div>
-                  <div class="mb-3">
-                    <img src="https://images.unsplash.com/photo-1602526430780-782d6b1783fa?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="img-fluid" alt="">
-                    <label for="productImage"
-                    class="form-label">產品圖片</label>
-                    <input type="text" id="productImage"
-                      class="form-control"
-                    >
-                  </div>
-                  <button type="button"
-                  class="btn btn-secondary">更新</button>
-                </form>
-              </div>
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+</head>
 
-<img src="https://picsum.photos/id/684/600/400" alt="">
+<body>
+  <div class="container" id="app">
+    <div class="text-end">
+      <button class="btn btn-primary" type="button" v-on:click="addItem">新增</button>
+    </div>
+    <!-- Product Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>標題</th>
+          <th>圖片</th>
+          <th>銷售狀態</th>
+          <th>編輯</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in products" :key="id" v-bind:class="{'table-success':item.onStock}">
+          <td>{{item.name}}</td>
+          <td><img :src="item.imageUrl" alt="產品圖片" height="100"></td>
+          <td><input type="checkbox" v-model="item.onStock"></td>
+          <td><button type="button" class="btn btn-outline-success" v-on:click="edit(item)">修改</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card m-3">
+      <div class="card-header">
+        在您測試新增商品功能時可能會用到：
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">範例圖片網址</h5>
+        <p class="card-text">https://images.unsplash.com/photo-1602526430780-782d6b1783fa?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80</p>
+      </div>
+    </div>
+
+    <!-- form表單 -->
+    <div  v-if="isNew||temp.id" class="card m-3 p-3">
+      <div class="card-header">
+        產品資訊
+      </div>
+      <div class="card-body">
+ <form>
+      <!-- 1. 產品名稱 -->
+      <div class="mb-3">
+        <label for="productName" class="form-label">名稱</label>
+        <input type="text" id="productName" class="form-control" v-model="temp.name" placeholder="請輸入產品的名稱">
+      </div>
+      <!-- 2. 產品圖片 -->
+      <div class="mb-3">
+        <img class="img-fluid" alt="" v-bind:src="temp.imageUrl">
+        <label for="productUrl" class="form-label">產品圖片網址</label>
+        <input type="text" id="productImage" class="form-control" v-model="temp.imageUrl" placeholder="請輸入產品圖片網址，例如https://images.unsplash.com/photo">
+      </div>
+      <!-- 3. 按鈕 -->
+      <button type="button" class="btn btn-secondary" v-on:click="confirmEdit">更新</button>
+    </form>
 
 
+      </div>
+   
+  </div>
+  </div>
 
-        </main>
-        <footer>
-            <!-- place footer here -->
-        </footer>
-        <!-- Bootstrap JavaScript Libraries -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"
-        ></script>
+  <!-- Bootstrap JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
 
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"
-        ></script>
-    </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+  <!-- Vue -->
+  <!-- 引入 Vue.js CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Vue.js scripts -->
+  <script>
+    const products = [{
+      id: '1',
+      imageUrl: 'https://images.unsplash.com/photo-1516906571665-49af58989c4e?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=80',
+      name: 'MacBook Pro',
+      onStock: false,
+    }, {
+      id: '2',
+      imageUrl: 'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
+      name: 'iPhone',
+      onStock: false,
+    }];
+    const App = {
+      data() {
+        return {
+          products: [],
+          temp: {
+            //name: '',
+            //imageUrl: 'https://images.unsplash.com/photo-1602526430780-782d6b1783fa?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+          },
+          //狀態:是否為新增產品
+          isNew: false
+        }
+      },
+      methods: {
+        addItem() {
+          //切換isNew狀態
+          this.isNew = true;
+          this.temp = {};
+        },
+
+        edit(item1) {
+          this.temp = { ...item1 };
+        },
+        confirmEdit() {
+          //沒id:新增
+          if (!this.temp.id) {
+            this.temp.id = new Date().getTime();
+            this.temp.onStock = false;
+            this.products.push(this.temp);
+          } else {
+            //有id:修改
+            this.products.forEach((item, i) => {
+              //比對id位址是否跟原本相同
+              if (item.id === this.temp.id) {
+                this.products[i] = this.temp;
+              }
+            });
+          }
+          this.isNew = false
+          //清空temp
+          this.temp = {};
+        },
+
+      },
+      created() {
+        this.products = products;
+      }
+    };
+
+    Vue.createApp(App).mount('#app');
+  </script>
+
+
+</body>
+
 </html>
